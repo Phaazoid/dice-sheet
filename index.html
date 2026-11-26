@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#1c1c1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dice Sheet">
+<title>Dice Sheet</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <main id="rows" aria-label="Score rows"></main>
+  <footer id="foot"></footer>
+  <div id="confirm" hidden>
+    <div class="card" role="alertdialog" aria-labelledby="confirm-title">
+      <p id="confirm-title">Start a new game? This clears the sheet.</p>
+      <div class="card-actions">
+        <button type="button" id="confirm-no">Keep playing</button>
+        <button type="button" id="confirm-yes" class="danger">New game</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

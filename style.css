@@ -1,0 +1,171 @@
+/* Landscape-first score sheet. Sizes use vmax/vmin so the sheet is the
+   same shape whether the phone is turned or held upright (see the
+   portrait rule at the bottom, which rotates the whole app). */
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #1c1c1a;
+  color: #f1efe8;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1vmin;
+  padding:
+    max(1.5vmin, env(safe-area-inset-top))
+    max(1.5vmin, env(safe-area-inset-right))
+    max(1.5vmin, env(safe-area-inset-bottom))
+    max(1.5vmin, env(safe-area-inset-left));
+}
+
+#rows {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1vmin;
+}
+
+.row {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(11, minmax(0, 1fr)) minmax(0, 1.1fr);
+  gap: 0.6vmax;
+  padding: 1vmin;
+  border-radius: 1.6vmin;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+button:disabled { cursor: default; }
+
+.cell {
+  border-radius: 1.2vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(14px, 2.6vmax, 30px);
+  font-weight: 600;
+  min-width: 0;
+  min-height: 0;
+}
+.cell svg { width: 55%; height: 55%; max-width: 30px; max-height: 30px; }
+
+.red    { --band: #a32d2d; --cell: #fcebeb; --ink: #791f1f; --dim: #d97b7b; --mark: #501313; }
+.yellow { --band: #ba7517; --cell: #faeeda; --ink: #633806; --dim: #e6b260; --mark: #412402; }
+.green  { --band: #3b6d11; --cell: #eaf3de; --ink: #27500a; --dim: #86b34d; --mark: #173404; }
+.blue   { --band: #185fa5; --cell: #e6f1fb; --ink: #0c447c; --dim: #76a9de; --mark: #042c53; }
+
+.row { background: var(--band); }
+.cell.open   { background: var(--cell); color: var(--ink); }
+.cell.marked { background: var(--mark); color: var(--cell); }
+.cell.dead   { background: transparent; color: var(--dim); }
+
+#foot {
+  display: flex;
+  align-items: center;
+  gap: 1vmax;
+  font-size: clamp(12px, 1.9vmax, 20px);
+}
+#foot .spacer { flex: 1; }
+#foot .label { color: #b4b2a9; }
+
+.btn {
+  height: clamp(32px, 9vmin, 52px);
+  padding: 0 1.4vmax;
+  border-radius: 1.2vmin;
+  background: #2c2c2a;
+  border: 1px solid #5f5e5a;
+  white-space: nowrap;
+}
+.btn:disabled { color: #5f5e5a; border-color: #444441; }
+.btn:active:not(:disabled) { background: #444441; }
+
+.pen {
+  width: clamp(30px, 8vmin, 48px);
+  height: clamp(30px, 8vmin, 48px);
+  border-radius: 1.2vmin;
+  background: transparent;
+  border: 1px solid #5f5e5a;
+  color: #f09595;
+  font-weight: 600;
+}
+.pen.next { border-color: #f09595; }
+.pen.on { background: #501313; border-color: #a32d2d; }
+
+.box {
+  min-width: clamp(38px, 5.5vmax, 64px);
+  height: clamp(32px, 9vmin, 52px);
+  padding: 0 0.8vmax;
+  border-radius: 1.2vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  background: var(--cell);
+  color: var(--ink);
+}
+.box.penalty { background: #501313; color: #f7c1c1; }
+.box.total {
+  background: #f1efe8;
+  color: #2c2c2a;
+  font-size: 1.3em;
+  min-width: clamp(52px, 7.5vmax, 84px);
+}
+.over { color: #fac775; font-weight: 600; white-space: nowrap; }
+
+#confirm {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#confirm[hidden] { display: none; }
+.card {
+  background: #2c2c2a;
+  border: 1px solid #5f5e5a;
+  border-radius: 12px;
+  padding: 20px 24px;
+  max-width: 80%;
+  font-size: 17px;
+}
+.card p { margin: 0 0 16px; }
+.card-actions { display: flex; gap: 12px; justify-content: flex-end; }
+.card-actions .btn { height: 44px; padding: 0 16px; }
+.btn.danger { background: #a32d2d; border-color: #a32d2d; }
+
+/* Held upright (or rotation-locked): turn the whole sheet a quarter turn
+   so it is still a landscape sheet. */
+@media (orientation: portrait) {
+  #app {
+    inset: auto;
+    top: 0;
+    left: 100vw;
+    width: 100vh;
+    width: 100dvh;
+    height: 100vw;
+    transform-origin: top left;
+    transform: rotate(90deg);
+  }
+}
