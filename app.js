@@ -104,6 +104,7 @@
 
   var rowsEl = document.getElementById('rows');
   var footEl = document.getElementById('foot');
+  var sideEl = document.getElementById('side');
   var confirmEl = document.getElementById('confirm');
 
   function draw() {
@@ -131,8 +132,7 @@
     rowsEl.innerHTML = h;
 
     var show = !S.hide || over;
-    var f = '<button type="button" class="btn" data-act="undo"' + (S.hist.length ? '' : ' disabled') + '>Undo</button>';
-    f += '<span class="label narrow-hide">Penalties</span>';
+    var f = over ? '<span class="over">Game over</span>' : '<span class="label narrow-hide">Penalties</span>';
     for (var p = 0; p < MAX_PENALTIES; p++) {
       var on = p < S.pen;
       var next = p === S.pen && !over;
@@ -140,17 +140,19 @@
         (next ? '' : ' disabled') + ' aria-label="Penalty ' + (p + 1) + (on ? ', marked' : '') + '">' + (on ? '✕' : '') + '</button>';
     }
     f += '<span class="spacer"></span>';
-    if (over) f += '<span class="over">Game over</span>';
     ROWS.forEach(function (row, r) {
       f += '<span class="box ' + row.key + '" aria-label="' + row.key + ' score">' + (show ? rowScore(r) : '–') + '</span>';
     });
     f += '<span class="box penalty" aria-label="Penalty points">' + (show ? (S.pen ? '−' + S.pen * PENALTY : '0') : '–') + '</span>';
     f += '<span class="box total" aria-label="Total score">' + (show ? total() : '–') + '</span>';
-    f += '<button type="button" class="btn" data-act="rules">Rules</button>';
-    f += '<button type="button" class="btn" data-act="scoring">Scoring</button>';
-    f += '<button type="button" class="btn" data-act="hide">' + (S.hide ? 'Show' : 'Hide') + '</button>';
-    f += '<button type="button" class="btn" data-act="new">New</button>';
     footEl.innerHTML = f;
+
+    sideEl.innerHTML =
+      '<button type="button" class="btn" data-act="undo"' + (S.hist.length ? '' : ' disabled') + '>Undo</button>' +
+      '<button type="button" class="btn" data-act="rules">Rules</button>' +
+      '<button type="button" class="btn" data-act="scoring">Scoring</button>' +
+      '<button type="button" class="btn" data-act="hide">' + (S.hide ? 'Show' : 'Hide') + '</button>' +
+      '<button type="button" class="btn" data-act="new">New</button>';
   }
 
   // ---- input ----
@@ -171,7 +173,9 @@
     });
   });
 
-  footEl.addEventListener('click', function (e) {
+  footEl.addEventListener('click', onAction);
+  sideEl.addEventListener('click', onAction);
+  function onAction(e) {
     var b = e.target.closest('button');
     if (!b || b.disabled) return;
     switch (b.dataset.act) {
@@ -184,7 +188,7 @@
       case 'rules': showInfo('Rules', RULES_HTML); break;
       case 'scoring': showInfo('Scoring', scoringHtml()); break;
     }
-  });
+  }
 
   // ---- reference panels ----
 

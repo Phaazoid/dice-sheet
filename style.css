@@ -21,14 +21,31 @@ html, body {
   position: fixed;
   inset: 0;
   display: flex;
-  flex-direction: column;
-  gap: 1vmin;
+  flex-direction: row;
+  gap: 1vmax;
   padding:
     max(1.5vmin, env(safe-area-inset-top))
     max(1.5vmin, env(safe-area-inset-right))
     max(1.5vmin, env(safe-area-inset-bottom))
     max(1.5vmin, env(safe-area-inset-left));
 }
+
+#sheet {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1vmin;
+}
+
+#side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1vmin;
+  font-size: clamp(12px, 1.9vmax, 20px);
+}
+#side .btn { flex: 1; height: auto; min-height: 0; }
 
 #rows {
   flex: 1;
@@ -101,6 +118,7 @@ button:disabled { cursor: default; }
 .btn:active:not(:disabled) { background: #444441; }
 
 .pen {
+  flex: none;
   width: clamp(30px, 8vmin, 48px);
   height: clamp(30px, 8vmin, 48px);
   border-radius: 1.2vmin;
@@ -113,7 +131,8 @@ button:disabled { cursor: default; }
 .pen.on { background: #501313; border-color: #a32d2d; }
 
 .box {
-  min-width: clamp(38px, 5.5vmax, 64px);
+  flex: 0 1 auto;
+  min-width: clamp(34px, 5.5vmax, 64px);
   height: clamp(32px, 9vmin, 52px);
   padding: 0 0.8vmax;
   border-radius: 1.2vmin;
@@ -180,8 +199,6 @@ button:disabled { cursor: default; }
 #foot .label.narrow-hide { white-space: nowrap; }
 @media (orientation: landscape) and (max-width: 780px), (orientation: portrait) and (max-height: 780px) {
   #foot .label.narrow-hide { display: none; }
-  #foot { gap: 0.7vmax; }
-  .btn { padding: 0 1vmax; }
 }
 .card {
   background: #2c2c2a;
