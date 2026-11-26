@@ -167,5 +167,11 @@ button:disabled { cursor: default; }
     height: 100vw;
     transform-origin: top left;
     transform: rotate(90deg);
+    /* The sheet's left edge is the phone's top, and so on round. */
+    padding:
+      max(1.5vmin, env(safe-area-inset-right))
+      max(1.5vmin, env(safe-area-inset-bottom))
+      max(1.5vmin, env(safe-area-inset-left))
+      max(1.5vmin, env(safe-area-inset-top));
   }
 }
