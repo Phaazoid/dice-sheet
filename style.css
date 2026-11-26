@@ -133,7 +133,7 @@ button:disabled { cursor: default; }
 }
 .over { color: #fac775; font-weight: 600; white-space: nowrap; }
 
-#confirm {
+.overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -141,7 +141,48 @@ button:disabled { cursor: default; }
   align-items: center;
   justify-content: center;
 }
-#confirm[hidden] { display: none; }
+.overlay[hidden] { display: none; }
+
+.card.wide {
+  width: 92%;
+  max-width: 760px;
+  max-height: 92%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.card-head h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.card-head .btn { height: 40px; padding: 0 16px; }
+#info-body { overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0; }
+#info-body p { margin: 0 0 10px; }
+#info-body h3 { margin: 12px 0 4px; font-size: 15px; font-weight: 600; color: #fac775; }
+#info-body ul, #info-body ol { margin: 0 0 10px; padding-left: 22px; }
+#info-body li { margin-bottom: 4px; }
+.score-table { width: 100%; border-collapse: collapse; margin: 4px 0 12px; table-layout: fixed; }
+.score-table th, .score-table td {
+  border: 1px solid #5f5e5a;
+  text-align: center;
+  padding: 6px 0;
+  font-weight: 600;
+}
+.score-table th { color: #b4b2a9; font-weight: 400; }
+.score-table .head { width: 4.5em; color: #b4b2a9; font-weight: 400; }
+
+#foot .label.narrow-hide { white-space: nowrap; }
+@media (orientation: landscape) and (max-width: 780px), (orientation: portrait) and (max-height: 780px) {
+  #foot .label.narrow-hide { display: none; }
+  #foot { gap: 0.7vmax; }
+  .btn { padding: 0 1vmax; }
+}
 .card {
   background: #2c2c2a;
   border: 1px solid #5f5e5a;

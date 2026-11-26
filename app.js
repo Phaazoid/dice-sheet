@@ -132,7 +132,7 @@
 
     var show = !S.hide || over;
     var f = '<button type="button" class="btn" data-act="undo"' + (S.hist.length ? '' : ' disabled') + '>Undo</button>';
-    f += '<span class="label">Penalties</span>';
+    f += '<span class="label narrow-hide">Penalties</span>';
     for (var p = 0; p < MAX_PENALTIES; p++) {
       var on = p < S.pen;
       var next = p === S.pen && !over;
@@ -146,6 +146,8 @@
     });
     f += '<span class="box penalty" aria-label="Penalty points">' + (show ? (S.pen ? '−' + S.pen * PENALTY : '0') : '–') + '</span>';
     f += '<span class="box total" aria-label="Total score">' + (show ? total() : '–') + '</span>';
+    f += '<button type="button" class="btn" data-act="rules">Rules</button>';
+    f += '<button type="button" class="btn" data-act="scoring">Scoring</button>';
     f += '<button type="button" class="btn" data-act="hide">' + (S.hide ? 'Show' : 'Hide') + '</button>';
     f += '<button type="button" class="btn" data-act="new">New</button>';
     footEl.innerHTML = f;
@@ -179,8 +181,53 @@
         break;
       case 'hide': S.hide = !S.hide; save(); draw(); break;
       case 'new': confirmEl.hidden = false; break;
+      case 'rules': showInfo('Rules', RULES_HTML); break;
+      case 'scoring': showInfo('Scoring', scoringHtml()); break;
     }
   });
+
+  // ---- reference panels ----
+
+  var RULES_HTML =
+    '<h3>The dice</h3>' +
+    '<p>Six dice: two white, and one each of red, yellow, green and blue. Players take turns being the roller.</p>' +
+    '<h3>Each roll</h3>' +
+    '<ol>' +
+    '<li><b>Everyone:</b> add the two white dice. Any player may mark that number in any one row.</li>' +
+    '<li><b>Roller only:</b> then add one white die to one coloured die, and mark that number in the row of that colour.</li>' +
+    '</ol>' +
+    '<p>Both steps are optional, but a roller who marks nothing at all on their own roll takes a penalty.</p>' +
+    '<h3>Marking</h3>' +
+    '<ul>' +
+    '<li>Rows are marked left to right. You may skip numbers, but skipped numbers are gone for good.</li>' +
+    '<li>The last number in a row (12 in red and yellow, 2 in green and blue) needs at least ' + MARKS_TO_LOCK + ' marks in that row first.</li>' +
+    '<li>Marking the last number locks the row for everyone and earns the lock as a bonus mark. That colour\'s die leaves the game. When someone else locks a row, tap its padlock here.</li>' +
+    '</ul>' +
+    '<h3>Game end</h3>' +
+    '<p>The game ends as soon as two rows are locked, or one player has ' + MAX_PENALTIES + ' penalties. Highest total wins.</p>';
+
+  function scoringHtml() {
+    var top = '<tr><td class="head">Marks</td>', bottom = '<tr><td class="head">Points</td>';
+    for (var n = 1; n <= 12; n++) {
+      top += '<th>' + n + '</th>';
+      bottom += '<td>' + (n * (n + 1) / 2) + '</td>';
+    }
+    return '<p>Each row scores by how many marks it has. A lock counts as one more mark.</p>' +
+      '<table class="score-table">' + top + '</tr>' + bottom + '</tr></table>' +
+      '<p>Each penalty is −' + PENALTY + ' points.</p>' +
+      '<p>Total = red + yellow + green + blue − penalties.</p>';
+  }
+
+  var infoEl = document.getElementById('info');
+  function showInfo(title, html) {
+    document.getElementById('info-title').textContent = title;
+    var body = document.getElementById('info-body');
+    body.innerHTML = html;
+    body.scrollTop = 0;
+    infoEl.hidden = false;
+  }
+  document.getElementById('info-close').addEventListener('click', function () { infoEl.hidden = true; });
+  infoEl.addEventListener('click', function (e) { if (e.target === infoEl) infoEl.hidden = true; });
 
   document.getElementById('confirm-no').addEventListener('click', function () {
     confirmEl.hidden = true;

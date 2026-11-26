@@ -18,7 +18,16 @@
 <div id="app">
   <main id="rows" aria-label="Score rows"></main>
   <footer id="foot"></footer>
-  <div id="confirm" hidden>
+  <div id="info" class="overlay" hidden>
+    <div class="card wide" role="dialog" aria-labelledby="info-title">
+      <div class="card-head">
+        <h2 id="info-title"></h2>
+        <button type="button" id="info-close" class="btn">Close</button>
+      </div>
+      <div id="info-body"></div>
+    </div>
+  </div>
+  <div id="confirm" class="overlay" hidden>
     <div class="card" role="alertdialog" aria-labelledby="confirm-title">
       <p id="confirm-title">Start a new game? This clears the sheet.</p>
       <div class="card-actions">
