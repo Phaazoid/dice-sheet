@@ -116,10 +116,13 @@
         var n = row.asc ? i + 2 : 12 - i;
         var marked = S.marks[r].indexOf(i) >= 0;
         var ok = canMark(r, i);
-        var cls = marked ? 'marked' : ok ? 'open' : 'dead';
+        var waiting = i === LAST && !marked && !ok && !over && !S.locked[r] && !S.closed[r];
+        var cls = marked ? 'marked' : ok ? 'open' : waiting ? 'wait' : 'dead';
+        var have = S.marks[r].length;
         h += '<button type="button" class="cell ' + cls + '" data-r="' + r + '" data-i="' + i + '"' +
-          (ok ? '' : ' disabled') + ' aria-label="' + row.key + ' ' + n + (marked ? ', marked' : '') + '">' +
-          (marked ? X_SVG : n) + '</button>';
+          (ok ? '' : ' disabled') + ' aria-label="' + row.key + ' ' + n +
+          (marked ? ', marked' : waiting ? ', needs ' + MARKS_TO_LOCK + ' marks, you have ' + have : '') + '">' +
+          (marked ? X_SVG : waiting ? n + '<span class="sub">' + have + '/' + MARKS_TO_LOCK + '</span>' : n) + '</button>';
       }
       var shut = S.locked[r] || S.closed[r];
       var lcls = S.locked[r] ? 'marked' : S.closed[r] ? 'dead' : 'open';

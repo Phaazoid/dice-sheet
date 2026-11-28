@@ -96,6 +96,14 @@ button:disabled { cursor: default; }
 .cell.open   { background: var(--cell); color: var(--ink); }
 .cell.marked { background: var(--mark); color: var(--cell); }
 .cell.dead   { background: transparent; color: var(--dim); }
+.cell.wait {
+  background: transparent;
+  color: var(--cell);
+  border: 2px dashed var(--cell);
+  flex-direction: column;
+  line-height: 1.05;
+}
+.cell.wait .sub { font-size: clamp(10px, 1.5vmax, 16px); font-weight: 400; }
 
 #foot {
   display: flex;
